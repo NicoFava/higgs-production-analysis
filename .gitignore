@@ -1,0 +1,68 @@
+# ==============================================================================
+# 1. DATI PESANTI E SIMULAZIONI (MadGraph, Pythia, Delphes)
+# ==============================================================================
+# File ROOT (estremamente pesanti, mai tracciarli)
+*.root
+
+# Output di MadGraph e Pythia
+*.lhe
+*.lhe.gz
+*.hepmc
+*.hepmc.gz
+*.slha
+
+# Ignora l'intero contenuto della cartella data/ e delle sue sottocartelle
+data/
+!data/.keep
+
+
+# ==============================================================================
+# 3. PYTHON E AMBIENTI VIRTUALI
+# ==============================================================================
+# Cache di Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambienti virtuali (fondamentale non committarli)
+venv/
+.venv/
+env/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# ==============================================================================
+# 4. DATI SENSIBILI E CONFIGURAZIONI LOCALI
+# ==============================================================================
+# File contenenti token, password o percorsi specifici del tuo PC
+.env
+.env.local
+.secret
+*.pem
+*.key
+
+# ==============================================================================
+# 5. LIBRERIE COMPILATE (C++ / ROOT)
+# ==============================================================================
+*.so
+*.d
+*.pcm
+*_C.so
+
+# ==============================================================================
+# 6. FILE DI SISTEMA OPERATIVO E IDE
+# ==============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# VS Code / PyCharm
+.vscode/
+.idea/
