@@ -277,17 +277,10 @@ def main():
         h["shower"][var].SetLineColor(ROOT.kRed)
         h["shower"][var].SetLineWidth(2)
         
-        # Normalize histograms to unity (Shape comparison)
-        if h["parton"][var].Integral() > 0: 
-            h["parton"][var].Scale(1.0 / h["parton"][var].Integral())
-        if h["shower"][var].Integral() > 0: 
-            h["shower"][var].Scale(1.0 / h["shower"][var].Integral())
-        
         max_y = max(h["parton"][var].GetMaximum(), h["shower"][var].GetMaximum())
         h["parton"][var].SetMaximum(max_y * 1.3)
         
         # Plot styling
-        h["parton"][var].GetYaxis().SetTitle("Normalized Units")
         h["parton"][var].SetStats(0)
         h["shower"][var].SetStats(0)
 
@@ -304,6 +297,15 @@ def main():
         output_file = os.path.join(output_dir, f"{var}_{args.process}.png")
         canvas.SaveAs(output_file)
         canvas.Clear()
+
+    # Save all histograms to a ROOT file
+    root_output_file = os.path.join(output_dir, f"{args.process}_histograms.root")
+    out_root = ROOT.TFile.Open(root_output_file, "RECREATE")
+    for level in ["parton", "shower"]:
+        for hist in h[level].values():
+            hist.Write()
+    out_root.Close()
+    print(f"Saved ROOT file with all histograms: {root_output_file}")
 
     print(f"Analysis complete! Plots for {args.process} saved in '{output_dir}'.")
 

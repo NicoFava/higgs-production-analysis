@@ -43,7 +43,7 @@ def analyze_single_file(file_path, dataset_color, tree_name="mini"):
     for hist in [h_m4l, h_mZ1, h_mZ2]:
         hist.SetLineColor(dataset_color)
         hist.SetFillColor(dataset_color)
-        hist.SetFillStyle(3004) # Distinct hashed fill style
+        hist.SetFillStyle(3004)
         hist.SetLineWidth(2)
         hist.SetDirectory(0)
 
