@@ -115,6 +115,7 @@ def main():
         # General observables
         h[level]["Njets"] = ROOT.TH1F(f"Njets_{prefix}", f"{args.process}: Number of Jets; N_{{jets}}; Events", 10, -0.5, 9.5)
         h[level]["pT_H"]  = ROOT.TH1F(f"pT_H_{prefix}", f"{args.process}: Higgs Boson p_{{T}}; p_{{T}}^{{H}} [GeV]; Events", 50, 0, 400)
+        h[level]["eta_H"] = ROOT.TH1F(f"eta_H_{prefix}", f"{args.process}: Higgs Boson #eta; #eta_{{H}}; Events", 50, -5, 5)
         h[level]["HT"]    = ROOT.TH1F(f"HT_{prefix}", f"{args.process}: Scalar Sum of Jet p_{{T}}; H_{{T}} [GeV]; Events", 50, 0, 800)
         
         # VBF Specific Observables (Requires >= 2 jets)
@@ -123,15 +124,16 @@ def main():
         h[level]["dPhi_jj"] = ROOT.TH1F(f"dPhi_jj_{prefix}", f"{args.process}: Azimuthal Separation; #Delta#phi_{{jj}} [rad]; Events", 50, 0, ROOT.TMath.Pi())
 
         # VH Specific Observables (Requires Leptons / MET)
-        h[level]["N_l"]     = ROOT.TH1F(f"N_l_{prefix}", f"{args.process}: Number of Leptons (N_{{f}}); N_{{#ell}}; Events", 6, -0.5, 5.5)
+        h[level]["N_l"]     = ROOT.TH1F(f"N_l_{prefix}", f"{args.process}: Number of Leptons (N_{{f}}); N_{{l}}; Events", 6, -0.5, 5.5)
         h[level]["Emiss_T"] = ROOT.TH1F(f"Emiss_T_{prefix}", f"{args.process}: Missing Transverse Energy; E_{{T}}^{{miss}} [GeV]; Events", 50, 0, 400)
-        h[level]["m_ll"]    = ROOT.TH1F(f"m_ll_{prefix}", f"{args.process}: Dilepton Invariant Mass (m_{{ee}}); m_{{#ell#ell}} [GeV]; Events", 50, 0, 200)
+        h[level]["m_ll"]    = ROOT.TH1F(f"m_ll_{prefix}", f"{args.process}: Dilepton Invariant Mass (m_{{ee}}); m_{{ll}} [GeV]; Events", 50, 0, 200)
         h[level]["m_WT"]    = ROOT.TH1F(f"m_WT_{prefix}", f"{args.process}: W Transverse Mass; m_{{T}}^{{W}} [GeV]; Events", 50, 0, 200)
 
     # Helper function to avoid repetition
     def fill_histograms(level, higgs, jets, leptons, met_vec):
         if higgs:
             h[level]["pT_H"].Fill(higgs.Pt())
+            h[level]["eta_H"].Fill(higgs.Eta())
         
         h[level]["Njets"].Fill(len(jets))
         h[level]["HT"].Fill(sum([j.Pt() for j in jets]))
@@ -252,17 +254,6 @@ def main():
                 if abs(jet.eta) < 4.5:
                     vec = ROOT.TLorentzVector()
                     vec.SetPtEtaPhiM(jet.pt, jet.eta, jet.phi, jet.mass)
-                    shower_jets.append(vec)
-
-        # Jet Clustering using PyJet (Anti-kT, R=0.4)
-        shower_jets = []
-        if visible_particles:
-            vectors = np.array(visible_particles, dtype=np.dtype([('px', 'f8'), ('py', 'f8'), ('pz', 'f8'), ('E', 'f8')]))
-            sequence = cluster(vectors, R=0.4, p=-1) # p=-1 is Anti-kT
-            for jet in sequence.inclusive_jets(ptmin=25.0):
-                if abs(jet.eta) < 4.5:
-                    vec = ROOT.TLorentzVector()
-                    vec.SetPxPyPzE(jet.px, jet.py, jet.pz, jet.e)
                     shower_jets.append(vec)
 
         shower_jets.sort(key=lambda j: j.Pt(), reverse=True)
