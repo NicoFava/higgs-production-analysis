@@ -14,6 +14,7 @@ except ImportError as e:
 ROOT.gROOT.SetBatch(True)
 ROOT.TH1.SetDefaultSumw2(True)
 ROOT.gStyle.SetOptStat(0) # Remove statistics box
+ROOT.gStyle.SetOptTitle(1) # Ensure histogram titles are displayed
 
 # Exact list of the 11 kinematic variables
 VARIABLES = [
@@ -117,7 +118,6 @@ def main():
                 format_mc_hist(hp, ROOT.kBlue, 2)  # Parton: Dashed Blue
                 format_mc_hist(hs, ROOT.kRed, 1)   # Shower: Solid Red
 
-                # DYNAMIC Y-AXIS MAXIMUM CALCULATION (Safe check using Integrals)
                 max_y = 0.0
                 if hd.Integral() > 0:
                     for b in range(1, hd.GetNbinsX() + 1):
@@ -133,10 +133,6 @@ def main():
                 # Fallback value if every single histogram is completely empty
                 if max_y <= 0:
                     max_y = 1.0
-                
-                # --- THE ULTIMATE FIX: USE A DUMMY FRAME ---
-                # Create a completely empty histogram to act ONLY as the canvas axis frame.
-                # This decouples the drawing of the axes from the actual data distributions.
                 h_frame = hs.Clone(f"frame_{var}_{data_name}_{process_name}")
                 h_frame.Reset() # Clears all data and errors, leaving only the binning structure
                 h_frame.SetDirectory(0)
@@ -153,12 +149,7 @@ def main():
                 ROOT.gPad.SetLeftMargin(0.15)
                 ROOT.gPad.SetBottomMargin(0.12)
 
-                # 1. Draw ONLY the axes framework first
-                h_frame.Draw("AXIS")
-
-                # 2. Overlay the actual histograms on top safely.
-                # If any of these are mathematically empty, ROOT will gracefully draw nothing
-                # for them without breaking the axis scales we established above.
+                h_frame.Draw("HIST")
                 hs.Draw("HIST SAME")
                 hp.Draw("HIST SAME")
                 hd.Draw("PE SAME")
