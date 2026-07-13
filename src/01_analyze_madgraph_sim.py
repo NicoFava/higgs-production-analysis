@@ -126,7 +126,7 @@ def main():
         # VH Specific Observables (Requires Leptons / MET)
         h[level]["N_l"]     = ROOT.TH1F(f"N_l_{prefix}", f"{args.process}: Number of Leptons (N_{{f}}); N_{{l}}; Events", 6, -0.5, 5.5)
         h[level]["Emiss_T"] = ROOT.TH1F(f"Emiss_T_{prefix}", f"{args.process}: Missing Transverse Energy; E_{{T}}^{{miss}} [GeV]; Events", 50, 0, 400)
-        h[level]["m_ll"]    = ROOT.TH1F(f"m_ll_{prefix}", f"{args.process}: Dilepton Invariant Mass (m_{{ee}}); m_{{ll}} [GeV]; Events", 50, 0, 200)
+        h[level]["m_ll"]    = ROOT.TH1F(f"m_ll_{prefix}", f"{args.process}: Dilepton Invariant Mass (m_{{ll}}); m_{{ll}} [GeV]; Events", 50, 0, 200)
         h[level]["m_WT"]    = ROOT.TH1F(f"m_WT_{prefix}", f"{args.process}: W Transverse Mass; m_{{T}}^{{W}} [GeV]; Events", 50, 0, 200)
 
     # Helper function to avoid repetition

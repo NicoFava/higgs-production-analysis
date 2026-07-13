@@ -14,6 +14,24 @@ except ImportError as e:
 ROOT.gROOT.SetBatch(True)
 ROOT.TH1.SetDefaultSumw2(True)
 
+def get_event_weight(tree, branches, is_data=False):
+    """
+    Computes the event weight based on the presence of 'mcWeight' and scale factors.
+    If the event is from data, returns 1.0.
+    """
+    if is_data:
+        return 1.0
+    w = 1.0
+    if 'mcWeight' in branches:
+        w *= float(tree.mcWeight)
+    for b_name in branches:
+        if b_name.startswith('scaleFactor_'):
+            w *= float(getattr(tree, b_name))
+    return w
+
+def branch_names(tree):
+    return {b.GetName() for b in tree.GetListOfBranches()}
+
 def analyze_single_file(file_path, dataset_color, tree_name="mini"):
     """
     Analyzes a single blind ROOT file, applies lepton pairing for >= 4 leptons,
@@ -47,9 +65,12 @@ def analyze_single_file(file_path, dataset_color, tree_name="mini"):
         hist.SetLineWidth(2)
         hist.SetDirectory(0)
 
+    branches = branch_names(tree)
+
     # EVENT LOOP
     for event in tree:
         n_leps = getattr(event, 'lep_n', 0)
+        w = get_event_weight(tree, branches, is_data=False)
         if n_leps < 4:
             continue
             
@@ -122,9 +143,9 @@ def analyze_single_file(file_path, dataset_color, tree_name="mini"):
         m_4l = higgs_vec.M()
         
         # Fill histograms
-        h_m4l.Fill(m_4l)
-        h_mZ1.Fill(final_z1_vec.M())
-        h_mZ2.Fill(final_z2_vec.M())
+        h_m4l.Fill(m_4l, w)
+        h_mZ1.Fill(final_z1_vec.M(), w)
+        h_mZ2.Fill(final_z2_vec.M(), w)
 
     root_file.Close()
     return h_m4l, h_mZ1, h_mZ2
@@ -164,8 +185,7 @@ def main():
         hist_dict = {"m4l": h_m4l, "mZ1": h_mZ1, "mZ2": h_mZ2}
         
         for var_name, hist in hist_dict.items():
-            # Enlarged canvas dimensions (1000x800) to ensure high visibility
-            canvas = ROOT.TCanvas(f"c_{base_name}_{var_name}", "", 1000, 800)
+            canvas = ROOT.TCanvas(f"c_{base_name}_{var_name}", "", 1200, 800)
             
             # Pad margin optimization to prevent vertical axis label clipping
             ROOT.gPad.SetLeftMargin(0.20)
