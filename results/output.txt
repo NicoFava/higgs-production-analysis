@@ -6,75 +6,75 @@
 >>> TEST RESULTS FOR BLIND SAMPLE: H4l_A
 -----------------------------------------------------------------------------------------------
  -> HYPOTHESIS: VBF  | Key variable: m_jj (in [400.0, 1100.0])
-    Events in SR: Data = 27.8%   | MC expectation = 29.4%  
-    Shape test : Chi2/NDF = 10.57               | p-value = 9.1273e-12
+    Events in SR: Data = 27.8%   | MC expectation = 29.9%  
+    Shape test : Chi2/NDF = 7.08                | p-value = 1.4592e-07
     ------------------------------------------------------------------------------------------
- -> HYPOTHESIS: WH   | Key variable: m_WT (in [40.0, 120.0])
-    Events in SR: Data = 10.9%   | MC expectation = 50.1%  
-    Shape test : Chi2/NDF = 12.94               | p-value = 6.9570e-21
+ -> HYPOTHESIS: WH   | Key variable: m_WT (in [0.0, 120.0])
+    Events in SR: Data = 98.7%   | MC expectation = 97.2%  
+    Shape test : Chi2/NDF = 71.31               | p-value = 3.4582e-204
     ------------------------------------------------------------------------------------------
- -> HYPOTHESIS: ZH   | Key variable: m_ll (in [75.0, 105.0])
-    Events in SR: Data = 0.0%    | MC expectation = 57.4%  
+ -> HYPOTHESIS: ZH   | Key variable: m_ll (in [80.0, 100.0])
+    Events in SR: Data = 0.0%    | MC expectation = 77.7%  
     Shape test : Chi2/NDF = 999.90              | p-value = 0.0000e+00
     ------------------------------------------------------------------------------------------
  -> HYPOTHESIS: ggF  | Key variable: pT_H (in [0.0, 100.0])
     Events in SR: Data = 60.5%   | MC expectation = 88.0%  
-    Shape test : Chi2/NDF = 1300.96             | p-value = 0.0000e+00
+    Shape test : Chi2/NDF = 1300.93             | p-value = 0.0000e+00
     ------------------------------------------------------------------------------------------
 ===============================================================================================
 
 >>> TEST RESULTS FOR BLIND SAMPLE: H4l_B
 -----------------------------------------------------------------------------------------------
  -> HYPOTHESIS: VBF  | Key variable: m_jj (in [400.0, 1100.0])
-    Events in SR: Data = 7.2%    | MC expectation = 29.4%  
-    Shape test : Chi2/NDF = 25.19               | p-value = 4.4227e-30
+    Events in SR: Data = 7.2%    | MC expectation = 29.9%  
+    Shape test : Chi2/NDF = 20.42               | p-value = 4.7486e-24
     ------------------------------------------------------------------------------------------
- -> HYPOTHESIS: WH   | Key variable: m_WT (in [40.0, 120.0])
-    Events in SR: Data = 10.2%   | MC expectation = 50.1%  
-    Shape test : Chi2/NDF = 32.30               | p-value = 2.4979e-57
+ -> HYPOTHESIS: WH   | Key variable: m_WT (in [0.0, 120.0])
+    Events in SR: Data = 99.2%   | MC expectation = 97.2%  
+    Shape test : Chi2/NDF = 68.93               | p-value = 5.0319e-197
     ------------------------------------------------------------------------------------------
- -> HYPOTHESIS: ZH   | Key variable: m_ll (in [75.0, 105.0])
-    Events in SR: Data = 0.0%    | MC expectation = 57.4%  
+ -> HYPOTHESIS: ZH   | Key variable: m_ll (in [80.0, 100.0])
+    Events in SR: Data = 0.0%    | MC expectation = 77.7%  
     Shape test : Chi2/NDF = 999.90              | p-value = 0.0000e+00
     ------------------------------------------------------------------------------------------
  -> HYPOTHESIS: ggF  | Key variable: pT_H (in [0.0, 100.0])
     Events in SR: Data = 86.7%   | MC expectation = 88.0%  
-    Shape test : Chi2/NDF = 3.03                | p-value = 9.8278e-03
+    Shape test : Chi2/NDF = 3.03                | p-value = 9.8338e-03
     ------------------------------------------------------------------------------------------
 ===============================================================================================
 
 >>> TEST RESULTS FOR BLIND SAMPLE: H4l_C
 -----------------------------------------------------------------------------------------------
  -> HYPOTHESIS: VBF  | Key variable: m_jj (in [400.0, 1100.0])
-    Events in SR: Data = 3.3%    | MC expectation = 29.4%  
-    Shape test : Chi2/NDF = 7.07                | p-value = 1.5305e-07
+    Events in SR: Data = 3.3%    | MC expectation = 29.9%  
+    Shape test : Chi2/NDF = 5.80                | p-value = 4.7527e-06
     ------------------------------------------------------------------------------------------
- -> HYPOTHESIS: WH   | Key variable: m_WT (in [40.0, 120.0])
-    Events in SR: Data = 30.4%   | MC expectation = 50.1%  
-    Shape test : Chi2/NDF = 8.27                | p-value = 2.0478e-12
+ -> HYPOTHESIS: WH   | Key variable: m_WT (in [0.0, 120.0])
+    Events in SR: Data = 98.8%   | MC expectation = 97.2%  
+    Shape test : Chi2/NDF = 19.09               | p-value = 7.6130e-49
     ------------------------------------------------------------------------------------------
- -> HYPOTHESIS: ZH   | Key variable: m_ll (in [75.0, 105.0])
-    Events in SR: Data = 43.8%   | MC expectation = 57.4%  
-    Shape test : Chi2/NDF = 10.02               | p-value = 1.3339e-06
+ -> HYPOTHESIS: ZH   | Key variable: m_ll (in [80.0, 100.0])
+    Events in SR: Data = 43.8%   | MC expectation = 77.7%  
+    Shape test : Chi2/NDF = 5.26                | p-value = 5.2172e-03
     ------------------------------------------------------------------------------------------
  -> HYPOTHESIS: ggF  | Key variable: pT_H (in [0.0, 100.0])
     Events in SR: Data = 62.0%   | MC expectation = 88.0%  
-    Shape test : Chi2/NDF = 461.93              | p-value = 0.0000e+00
+    Shape test : Chi2/NDF = 461.92              | p-value = 0.0000e+00
     ------------------------------------------------------------------------------------------
 ===============================================================================================
 
 >>> TEST RESULTS FOR BLIND SAMPLE: H4l_D
 -----------------------------------------------------------------------------------------------
  -> HYPOTHESIS: VBF  | Key variable: m_jj (in [400.0, 1100.0])
-    Events in SR: Data = 4.0%    | MC expectation = 29.4%  
-    Shape test : Chi2/NDF = 17.36               | p-value = 3.3646e-20
+    Events in SR: Data = 4.0%    | MC expectation = 29.9%  
+    Shape test : Chi2/NDF = 14.98               | p-value = 3.1652e-17
     ------------------------------------------------------------------------------------------
- -> HYPOTHESIS: WH   | Key variable: m_WT (in [40.0, 120.0])
-    Events in SR: Data = 61.0%   | MC expectation = 50.1%  
-    Shape test : Chi2/NDF = 5.91                | p-value = 2.6911e-08
+ -> HYPOTHESIS: WH   | Key variable: m_WT (in [0.0, 120.0])
+    Events in SR: Data = 98.5%   | MC expectation = 97.2%  
+    Shape test : Chi2/NDF = 2.19   (Shape Match) | p-value = 6.2614e-03
     ------------------------------------------------------------------------------------------
- -> HYPOTHESIS: ZH   | Key variable: m_ll (in [75.0, 105.0])
-    Events in SR: Data = 0.0%    | MC expectation = 57.4%  
+ -> HYPOTHESIS: ZH   | Key variable: m_ll (in [80.0, 100.0])
+    Events in SR: Data = 0.0%    | MC expectation = 77.7%  
     Shape test : Chi2/NDF = 999.90              | p-value = 0.0000e+00
     ------------------------------------------------------------------------------------------
  -> HYPOTHESIS: ggF  | Key variable: pT_H (in [0.0, 100.0])

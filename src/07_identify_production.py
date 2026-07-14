@@ -30,8 +30,8 @@ ROOT.TH1.SetDefaultSumw2(True)
 # NOTE: Tune these values by looking at your histograms!
 SIGNAL_REGIONS = {
     "VBF": ("m_jj", 400.0, 1100.0),    # Remove the empty tail to avoid Chi2 warnings
-    "WH":  ("m_WT", 40.0, 120.0),      # W peak (already good)
-    "ZH":  ("m_ll", 75.0, 105.0),      # Use the associated Z mass peak!
+    "WH":  ("m_WT", 0.0, 120.0),      # W peak (already good)
+    "ZH":  ("m_ll", 80.0, 100.0),      # Use the associated Z mass peak!
     "ggF": ("pT_H", 0.0, 100.0)        # Low pT (already good)
 }
 
