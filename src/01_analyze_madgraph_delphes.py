@@ -4,6 +4,7 @@ import math
 import os
 import sys
 import gzip
+import pylhe
 
 try:
     import ROOT
@@ -50,53 +51,6 @@ ROOT.gInterpreter.Declare(r'''
 #include "classes/DelphesClasses.h"
 #include "ExRootAnalysis/ExRootTreeReader.h"
 ''')
-
-# ==============================================================================
-# PARSING FUNCTIONS FOR LHE
-# ==============================================================================
-def read_lhe_events(filepath):
-    """Yields (event_particles, event_weight) from a zipped LHE file."""
-    with gzip.open(filepath, 'rt') as f:
-        in_event = False
-        is_first_line = False
-        event_particles = []
-        event_weight = 1.0
-        
-        for line in f:
-            line = line.strip()
-            if not line: continue
-            
-            if line.startswith("<event>"):
-                in_event = True
-                is_first_line = True
-                event_particles = []
-                event_weight = 1.0
-                continue
-                
-            if line.startswith("</event>"):
-                in_event = False
-                yield event_particles, event_weight
-                continue
-                
-            if in_event:
-                # The first line inside <event> contains: NUP IDPRUP XWGTUP SCALUP AQEDUP AQCDUP
-                if is_first_line:
-                    parts = line.split()
-                    if len(parts) >= 3:
-                        event_weight = float(parts[2])
-                    is_first_line = False
-                    continue
-                
-                parts = line.split()
-                # Ensure it's a valid particle line
-                if len(parts) >= 11 and not line.startswith('#'):
-                    pdg = int(parts[0])
-                    status = int(parts[1])
-                    px, py, pz, e, mass = map(float, parts[6:11])
-                    event_particles.append({
-                        'pdg': pdg, 'status': status,
-                        'px': px, 'py': py, 'pz': pz, 'e': e, 'm': mass
-                    })
 
 # ==============================================================================
 # MAIN ANALYSIS LOOP
@@ -169,27 +123,35 @@ def main():
     # --------------------------------------------------------------------------
     # 2. PROCESS LHE FILE (PARTON LEVEL)
     # --------------------------------------------------------------------------
-    print("Processing LHE events (Parton Level)...")
-    for ievt, (event, weight) in enumerate(read_lhe_events(args.lhe)):
+    print("Processing LHE events (Parton Level) with pylhe...")
+    
+    # pylhe legge direttamente il file, gestendo in automatico l'estensione .gz
+    events = pylhe.read_lhe(args.lhe)
+    
+    for ievt, event in enumerate(events):
         if ievt % 1000 == 0 and ievt > 0:
             print(f"  Processed {ievt} LHE events...")
             
+        # Il peso dell'evento è salvato nelle info dell'evento
+        weight = event.eventinfo.weight
+        
         higgs_parton = None
         jets = []
         leptons = []
         met_x, met_y = 0.0, 0.0
 
-        for p in event:
+        for p in event.particles:
+            pid = abs(p.id) # In pylhe l'ID della particella si chiama 'id'
+            
             # Higgs
-            if abs(p['pdg']) == 25:
+            if pid == 25:
                 higgs_parton = ROOT.TLorentzVector()
-                higgs_parton.SetPxPyPzE(p['px'], p['py'], p['pz'], p['e'])
+                higgs_parton.SetPxPyPzE(p.px, p.py, p.pz, p.e)
             
             # Status 1 = outgoing final state partons in LHE
-            if p['status'] == 1:
-                pid = abs(p['pdg'])
+            if p.status == 1:
                 vec = ROOT.TLorentzVector()
-                vec.SetPxPyPzE(p['px'], p['py'], p['pz'], p['e'])
+                vec.SetPxPyPzE(p.px, p.py, p.pz, p.e)
                 
                 # Partonic Jets (Quarks 1-6 and Gluons 21)
                 if (pid <= 6 or pid == 21) and vec.Pt() > 25.0 and abs(vec.Eta()) < 4.5:
@@ -199,8 +161,8 @@ def main():
                     leptons.append(vec)
                 # Neutrinos (MET)
                 elif pid in [12, 14, 16]:
-                    met_x += p['px']
-                    met_y += p['py']
+                    met_x += p.px
+                    met_y += p.py
 
         jets.sort(key=lambda j: j.Pt(), reverse=True)
         leptons.sort(key=lambda l: l.Pt(), reverse=True)

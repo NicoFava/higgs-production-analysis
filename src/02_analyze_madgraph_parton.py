@@ -4,6 +4,7 @@ import math
 import os
 import sys
 import gzip
+import pylhe
 
 try:
     import ROOT
@@ -13,35 +14,6 @@ except ImportError as e:
 
 ROOT.gROOT.SetBatch(True)
 ROOT.TH1.SetDefaultSumw2(True)
-
-def read_lhe_events(filepath):
-    with gzip.open(filepath, 'rt') as f:
-        in_event = False
-        is_first_line = False
-        event_particles = []
-        for line in f:
-            line = line.strip()
-            if not line: continue
-            if line.startswith("<event>"):
-                in_event = True
-                is_first_line = True
-                event_particles = []
-                continue
-            if line.startswith("</event>"):
-                in_event = False
-                yield event_particles
-                continue
-            if in_event:
-                if is_first_line:
-                    is_first_line = False
-                    continue
-                parts = line.split()
-                if len(parts) >= 11 and not line.startswith('#'):
-                    event_particles.append({
-                        'pdg': int(parts[0]), 'status': int(parts[1]),
-                        'px': float(parts[6]), 'py': float(parts[7]), 'pz': float(parts[8]), 
-                        'e': float(parts[9]), 'm': float(parts[10])
-                    })
 
 def main():
     parser = argparse.ArgumentParser(description="Compare 4 processes at Parton Level (LHE).")
@@ -91,31 +63,34 @@ def main():
             print(f"  WARNING: File {proc_info['file']} not found. Skipping {proc_name}.")
             continue
 
-        for ievt, event in enumerate(read_lhe_events(proc_info["file"])):
-            if ievt % 2000 == 0 and ievt > 0: print(f"  ... {ievt} events")
+        events = pylhe.read_lhe(proc_info["file"])
+        for ievt, event in enumerate(events):
+            if ievt % 2000 == 0 and ievt > 0:
+                print(f"  ... {ievt} events")
             
+            weight = event.eventinfo.weight
             higgs = None
             jets = []
             leptons = []
             met_x, met_y = 0.0, 0.0
 
-            for p in event:
-                if abs(p['pdg']) == 25:
+            for p in event.particles:
+                pid = abs(p.id)
+                if pid == 25:
                     higgs = ROOT.TLorentzVector()
-                    higgs.SetPxPyPzE(p['px'], p['py'], p['pz'], p['e'])
+                    higgs.SetPxPyPzE(p.px, p.py, p.pz, p.e)
                 
-                if p['status'] == 1:
-                    pid = abs(p['pdg'])
+                if p.status == 1:
                     vec = ROOT.TLorentzVector()
-                    vec.SetPxPyPzE(p['px'], p['py'], p['pz'], p['e'])
+                    vec.SetPxPyPzE(p.px, p.py, p.pz, p.e)
                     
                     if (pid <= 6 or pid == 21) and vec.Pt() > 25.0 and abs(vec.Eta()) < 4.5:
                         jets.append(vec)
                     elif pid in [11, 13] and vec.Pt() > 10.0 and abs(vec.Eta()) < 2.5:
                         leptons.append(vec)
                     elif pid in [12, 14, 16]:
-                        met_x += p['px']
-                        met_y += p['py']
+                        met_x += p.px
+                        met_y += p.py
 
             jets.sort(key=lambda j: j.Pt(), reverse=True)
             leptons.sort(key=lambda l: l.Pt(), reverse=True)
@@ -123,25 +98,25 @@ def main():
             met_vec.SetPxPyPzE(met_x, met_y, 0.0, math.sqrt(met_x**2 + met_y**2))
 
             if higgs:
-                hists["pT_H"][proc_name].Fill(higgs.Pt())
-                hists["eta_H"][proc_name].Fill(higgs.Eta())
-            hists["Njets"][proc_name].Fill(len(jets))
-            hists["HT"][proc_name].Fill(sum([j.Pt() for j in jets]))
+                hists["pT_H"][proc_name].Fill(higgs.Pt(), weight)
+                hists["eta_H"][proc_name].Fill(higgs.Eta(), weight)
+            hists["Njets"][proc_name].Fill(len(jets), weight)
+            hists["HT"][proc_name].Fill(sum([j.Pt() for j in jets]), weight)
             
             if len(jets) >= 2:
                 j1, j2 = jets[0], jets[1]
-                hists["m_jj"][proc_name].Fill((j1 + j2).M())
-                hists["dEta_jj"][proc_name].Fill(abs(j1.Eta() - j2.Eta()))
-                hists["dPhi_jj"][proc_name].Fill(abs(j1.DeltaPhi(j2)))
+                hists["m_jj"][proc_name].Fill((j1 + j2).M(), weight)
+                hists["dEta_jj"][proc_name].Fill(abs(j1.Eta() - j2.Eta()), weight)
+                hists["dPhi_jj"][proc_name].Fill(abs(j1.DeltaPhi(j2)), weight)
 
-            hists["N_l"][proc_name].Fill(len(leptons))
-            hists["Emiss_T"][proc_name].Fill(met_vec.Pt())
+            hists["N_l"][proc_name].Fill(len(leptons), weight)
+            hists["Emiss_T"][proc_name].Fill(met_vec.Pt(), weight)
             if len(leptons) >= 2:
-                hists["m_ll"][proc_name].Fill((leptons[0] + leptons[1]).M())
+                hists["m_ll"][proc_name].Fill((leptons[0] + leptons[1]).M(), weight)
             if len(leptons) >= 1 and met_vec.Pt() > 0:
                 dphi = abs(leptons[0].DeltaPhi(met_vec))
                 mt = math.sqrt(max(0.0, 2 * leptons[0].Pt() * met_vec.Pt() * (1.0 - math.cos(dphi))))
-                hists["m_WT"][proc_name].Fill(mt)
+                hists["m_WT"][proc_name].Fill(mt, weight)
 
     canvas = ROOT.TCanvas("c", "Canvas", 800, 600)
     for var in hists.keys():
