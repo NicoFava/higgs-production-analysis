@@ -112,7 +112,7 @@ def main():
     parser.add_argument("--mc", nargs='+', required=True, help="List of MC ROOT files containing shower histograms")
     args = parser.parse_args()
 
-    # Struttura dei risultati: { blind_sample: { mc_process: (var, chi2_ndf, p_val, frac_data, frac_mc) } }
+    # Struttura dei risultati: {blind_sample: { mc_process: (var, chi2_ndf, p_val, frac_data, frac_mc) } }
     results = {}
 
     for data_path in args.data:
@@ -193,14 +193,11 @@ def main():
         for mc_process in sorted(mc_hypotheses.keys()):
             var, xmin, xmax, chi2, pval, f_data, f_mc = mc_hypotheses[mc_process]
             
-            # Formatting to make results clear
             output_lines.append(f" -> HYPOTHESIS: {mc_process:<4} | Key variable: {var} (in [{xmin}, {xmax}])")
             
-            # Event fraction: this is very useful!
             f_data_str = f"{f_data*100:.1f}%"
             f_mc_str = f"{f_mc*100:.1f}%"
             
-            # Color if the shape is compact
             chi2_str = f"{chi2:.2f}"
             if chi2 < 2.5 and chi2 > 0.0:
                 chi2_display = f"{chi2_str:<6} (Shape Match)"
