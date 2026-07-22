@@ -23,10 +23,10 @@ The four-lepton invariant mass ($m_{4\ell}$) allows for a clean reconstruction o
 </div>
 
 ### Production Mechanism Identification: Sample D & WH
-By comparing the kinematic distributions of the blind samples with the theoretical simulations, we can perform shape matching. For instance, the transverse momentum of the Higgs candidate ($p_{T,H}$) and the missing transverse energy distributions strongly suggest that **Sample D** is compatible with the **WH associated production** mechanism.
+By comparing the kinematic distributions of the blind samples with the theoretical simulations, we can perform shape matching. For instance, the transverse mass of the W boson ($m_{W,T}$) strongly suggests that **Sample D** is compatible with the **WH associated production** mechanism, showing an excellent overlap.
 
 <div align="center">
-  <img src="results/samples_analysis/comparisons/H4l_D/WH/compare_pT_H_H4l_D_vs_WH.png" alt="WH Shape Matching for Sample D" width="600"/>
+  <img src="results/samples_analysis/comparisons/H4l_D/WH/compare_m_WT_H4l_D_vs_WH.png" alt="WH Shape Matching for Sample D (W Transverse Mass)" width="600"/>
 </div>
 
 ## Repository Structure
@@ -55,10 +55,10 @@ La massa invariante a quattro leptoni ($m_{4\ell}$) permette una chiara ricostru
 </div>
 
 ### Identificazione del Meccanismo: Campione D & WH
-Confrontando le distribuzioni cinematiche dei campioni ciechi con le simulazioni teoriche, è possibile effettuare uno *shape matching*. Ad esempio, il momento trasverso del candidato Higgs ($p_{T,H}$) suggerisce fortemente che il **Campione D** sia compatibile con il meccanismo di produzione associata **WH**.
+Confrontando le distribuzioni cinematiche dei campioni ciechi con le simulazioni teoriche, è possibile effettuare uno *shape matching*. Ad esempio, la massa trasversa del bosone W ($m_{W,T}$) suggerisce fortemente che il **Campione D** sia compatibile con il meccanismo di produzione associata **WH**, mostrando una sovrapposizione eccellente.
 
 <div align="center">
-  <img src="results/samples_analysis/comparisons/H4l_D/WH/compare_pT_H_H4l_D_vs_WH.png" alt="Shape Matching WH per il Campione D" width="600"/>
+  <img src="results/samples_analysis/comparisons/H4l_D/WH/compare_m_WT_H4l_D_vs_WH.png" alt="Shape Matching WH per il Campione D (Massa Trasversa del W)" width="600"/>
 </div>
 
 ## Struttura della Repository
